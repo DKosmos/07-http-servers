@@ -17,13 +17,13 @@ const server = http.createServer(function(req, res){
 
   if(req.method === 'GET' && req.url.pathname === '/cowsay'){
     let params = req.url.query;
-    if(params){
+    if(params.text){
       res.writeHead(200, {'Content-Type': 'text/plain'});
       res.write(cowsay.say({text: params.text}));
       res.end();
     }
-    if(!params){
-      res.writeHead(400, {'Conent-Type': 'text/plain'});
+    if(!params.text){
+      res.writeHead(400, {'Content-Type': 'text/plain'});
       res.write(cowsay.say({text: 'bad request'}));
       res.end();
     }
