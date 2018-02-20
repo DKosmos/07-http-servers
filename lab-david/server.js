@@ -20,11 +20,13 @@ const server = http.createServer(function(req, res){
     if(params.text){
       res.writeHead(200, {'Content-Type': 'text/plain'});
       res.write(cowsay.say({text: params.text}));
+      console.log('GET/cowsay');
       res.end();
     }
     if(!params.text){
       res.writeHead(400, {'Content-Type': 'text/plain'});
       res.write(cowsay.say({text: 'bad request'}));
+      console.log('GET/cowsay BR');
       res.end();
     }
   }
@@ -32,18 +34,29 @@ const server = http.createServer(function(req, res){
   if(req.method === 'GET' && req.url.pathname === '/'){
     res.writeHead(200, {'Content-Type': 'text/plain'});
     res.write('hello from my server!');
+    console.log('GET/');
     res.end();
   }
 
   if(req.method === 'POST' || req.method === 'PUT'){
     parseBody(req, function(err){
-      if(err) throw new Error('error parsing request body');
-      console.log('req.body:', req.body);
-      res.end();
+      console.log('req.body.text:', req.body.text);
+      let text = req.body.text;
+      console.log('text:', text);
+      if(!text){
+        res.writeHead(400, {'Content-Type': 'text/plain'});
+        res.write(cowsay.say({text: 'bad request'}));
+        console.log('POST/PUT BR');
+        res.end();
+      }
+      if(text){
+        res.writeHead(200, {'Content-Type': 'text/plain'});
+        res.write(cowsay.say({text: req.body.text}));
+        console.log('POST/PUT');
+        res.end();
+      }
     });
   }
-
-  res.end();
 });
 
 server.listen(PORT, () => {
