@@ -40,6 +40,7 @@ const server = http.createServer(function(req, res){
 
   if(req.method === 'POST' || req.method === 'PUT'){
     parseBody(req, function(err){
+      if(err) console.error(err);
       console.log('req.body.text:', req.body.text);
       let text = req.body.text;
       console.log('text:', text);
